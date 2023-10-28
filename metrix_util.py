@@ -47,6 +47,40 @@ def getcount_up(exp_c , exp_loc):
 def combine(cond, exp):
     return dict(zip(cond, exp))
 
+def rgb_to_hex(rgb):
+    return "#{:02x}{:02x}{:02x}".format(int(rgb[0]*255), int(rgb[1]*255), int(rgb[2]*255))
+
+def generate_red_gradient(value):
+    color = (1, 1-value, 1-value)
+    hex_code = rgb_to_hex(color)
+    return hex_code
+
+def normalize(value, min_val, max_val):
+    return (value - min_val) / (max_val - min_val)
+
+def get_colour_code_g( max_, min_ , v):
+    if v != 0:
+        max_ = max_+ 10
+        v = v + 10
+
+    n_v = normalize(v,min_,max_)
+    return generate_green_gradient(n_v)
+
+
+def get_colour_code_red(max_, min_ , v):
+    if v != 0:
+        max_ = max_+ 10
+        v = v + 10
+
+    n_v = normalize(v,min_,max_)
+    return generate_red_gradient(n_v)
+
+
+def generate_green_gradient(value):
+    color = (1-value, 1, 1-value)  
+    hex_code = rgb_to_hex(color)
+    return hex_code
+
 
 
 def calculate_mat(df):
@@ -59,6 +93,13 @@ def calculate_mat(df):
 
     df = df.sort_values(by=['count'], ascending=False)
 
+    max_up = max((df['up_count']))
+    min_up = min((df['up_count']))
+
+    max_down = max((df['down_count']))
+    min_down = min((df['down_count']))
+
+    print(max_up,min_up, max_down, min_down)
 
     all_sites = df['mapped_phosphosite']
 
@@ -82,36 +123,35 @@ def calculate_mat(df):
     _dict = {}
     main_dic = {}
     
+    c_dict = {}
+    c_main_dic = {}
+
     for i , row in df.iterrows():
         came = False
         for k,v in row.items():
             if i == k:
                 _dict[k] = sum(v)
+                c_dict[k] = "#7393B3"
                 came = True
             else:
                 if came:
                     _dict[k] = v[1]
+                    c_dict[k] = get_colour_code_g( max_down, min_down , v[1])
+
+
                 else:
                     _dict[k] = v[0]
-
+                    c_dict[k] = get_colour_code_red( max_down, min_down , v[1])
 
         main_dic[i] = _dict
+        c_main_dic[i] = c_dict
         _dict = {}
+        c_dict = {}
 
     result  = pd.DataFrame(main_dic)
+    colour_df  = pd.DataFrame(c_main_dic)
 
-    result.to_excel("PRPF4B_matrix.xlsx")
-
-
-    return df
+    return result , colour_df
 
 def sum_up_down(mdf_up,mdf_down):
     pass
-
-
-
-
-
-
-
-

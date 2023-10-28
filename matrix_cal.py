@@ -1,15 +1,19 @@
 import pandas as pd
 
 from metrix_util import get_d , get_query , calculate_mat , get_query_pr , sum_up_down
+from get_plot import get_matrix_plot
 
-kianase = 'PRPF4B'
+kianase = 'CHEK1'
 
 q = get_query(kianase)
 df = get_d(q)
-mdf_down = calculate_mat(df)
-mdf_down.to_excel(f"{kianase}_site_matrix.xlsx")
-print("differentil down-regulated done")
+mdf , cdf = calculate_mat(df)
 
+mdf.to_excel("BLAAAAAAAAA.xlsx")
+get_matrix_plot(mdf , cdf)
+
+# mdf.to_excel(f"{kianase}_site_matrix.xlsx")
+# print("differentil down-regulated done")
 
 # profile
 # q = get_query_pr(kianase)
