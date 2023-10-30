@@ -1,5 +1,14 @@
 import pymysql
 import pandas as pd
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+DB_HOST = os.getenv('DB_HOST')
+DB_USER = os.getenv('DB_USER')
+DB_PASSWORD = os.getenv('DB_PASSWORD')
+DB_NAME = os.getenv('DB_NAME')
 
 
 def get_query(k):
@@ -13,11 +22,11 @@ def get_query_pr(k):
 
 def get_d(query):
     connection = pymysql.connect(
-        host='ciodsdb.cubtgfved0u5.us-west-1.rds.amazonaws.com',
+        host=DB_HOST,
         port=3306,
-        user='admin',
-        password='ciods123',
-        database='ciodsdb'
+        user=DB_USER,
+        password=DB_PASSWORD,
+        database=DB_NAME,
     )
     cursor = connection.cursor()
     cursor.execute(query)
@@ -105,6 +114,7 @@ def calculate_mat(df):
 
     df['condition_exp'] = df.apply(lambda x:combine(x["exp_condition"],x["expression"]) , axis = 1) 
 
+
     df = df[['mapped_phosphosite','condition_exp']]
 
     df.set_index('mapped_phosphosite', inplace=True)
@@ -120,6 +130,9 @@ def calculate_mat(df):
     
     df.drop('condition_exp',axis=1, inplace = True)
     
+    df.to_excel('testtt.xlsx')
+
+
     _dict = {}
     main_dic = {}
     
@@ -141,7 +154,7 @@ def calculate_mat(df):
 
                 else:
                     _dict[k] = v[0]
-                    c_dict[k] = get_colour_code_red( max_down, min_down , v[1])
+                    c_dict[k] = get_colour_code_red( max_up, min_up , v[0])
 
         main_dic[i] = _dict
         c_main_dic[i] = c_dict
