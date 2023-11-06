@@ -19,15 +19,16 @@ def get_matrix_plot(main_data_df,color_data_df):
     fig, ax = plt.subplots()
     heatmap = ax.imshow(rgb_data)
 
-    # for i in range(main_data_df.shape[0]):
-    #     for j in range(main_data_df.shape[1]):
-    #         text = ax.text(j, i, main_data_df.iat[i, j], ha='center',
-    # va='center', color='black')
+    for i in range(main_data_df.shape[0]):
+        for j in range(main_data_df.shape[1]):
+            if main_data_df.iat[i, j] != 0:
+                text = ax.text(j, i, main_data_df.iat[i, j], ha='center',
+    va='center', color='black')
     
     ax.xaxis.tick_top()
     
-    ax.set_xlabel('Phosposites')
-    ax.set_ylabel('Phosposites')
+    ax.set_xlabel('Phosphosites')
+    ax.set_ylabel('Phosphosites')
    
     ax.xaxis.set_label_position('top') 
 
