@@ -40,34 +40,37 @@ def get_d(query):
 def getcount_up(exp_c , exp_loc):
     count_up = 0
     count_down = 0
-    for k,v in exp_loc.items():
-        if v == "Up-regulated":
-            for ke, ve in exp_c.items():
-                if (k == ke ) and (ve == v):
-                    count_up += 1 
-        else:
-            for ke, ve in exp_c.items():
-                if (k == ke ) and (ve == v):
-                    count_down += 1 
+    
+    filt_dict = {k:v for (k,v) in exp_c.items() if v == "Up-regulated"}
+    filt_dict_loc = {k:v for (k,v) in exp_loc.items() if v == "Up-regulated"}
+
+    count_up = len(set(filt_dict.keys()) & set(filt_dict_loc.keys()))
+
+
+    filt_dict = {k:v for (k,v) in exp_c.items() if v == "down-regulated"}
+
+    filt_dict_loc = {k:v for (k,v) in exp_loc.items() if v == "down-regulated"}
+
+    count_down = len(set(filt_dict.keys()) & set(filt_dict_loc.keys()))
+
 
     return count_up , count_down
 
 def getcount_up_oppo(exp_c , exp_loc):
-    count_up_dowm = 0
-    count_down_up = 0
 
-    filtered_dict = {k:v for (k,v) in exp_c.items() if exp_c in k}
+    filt_dict = {k:v for (k,v) in exp_c.items() if v == "Up-regulated"}
 
-    for k,v in exp_c.items():
-        if v == "Up-regulated":
-            for ke, ve in exp_loc.items():
-                if (k == ke ) and (ve == "down-regulated"):
-                    count_up_dowm += 1
-        else:
-            for ke, ve in exp_loc.items():
-                if (k == ke ) and (ve == "Up-regulated"):
-                    count_down_up += 1
-# ====================================================================
+    filt_dict_loc = {k:v for (k,v) in exp_loc.items() if v == "down-regulated" }
+
+    count_up_dowm = len(set(filt_dict.keys()) & set(filt_dict_loc.keys()))
+
+
+    filt_dict = {k:v for (k,v) in exp_c.items() if v == "Up-regulated"}
+
+    filt_dict_loc = {k:v for (k,v) in exp_loc.items() if v == "down-regulated"}
+
+    count_down_up = len(set(filt_dict.keys()) & set(filt_dict_loc.keys()))
+
     return count_up_dowm , count_down_up
 
 
@@ -86,19 +89,11 @@ def normalize(value, min_val, max_val):
     return (value - min_val) / (max_val - min_val)
 
 def get_colour_code_g( max_, min_ , v):
-    if v != 0:
-        max_ = max_+ 10
-        v = v + 10
-
     n_v = normalize(v,min_,max_)
     return generate_green_gradient(n_v)
 
 
 def get_colour_code_red(max_, min_ , v):
-    if v != 0:
-        max_ = max_+ 10
-        v = v + 10
-
     n_v = normalize(v,min_,max_)
     return generate_red_gradient(n_v)
 
@@ -113,8 +108,6 @@ def get_min_max(df):
 
     diagonal_values = np.diag(df.values)
     
-    print(diagonal_values)
-
     np.fill_diagonal(df.values,0)
 
     max_up = np.triu(df.values).max()
@@ -238,7 +231,6 @@ def calculate_mat_op(df , CUT_OFF):
 
     li_up = []
 
-
     for i, val in df.iterrows():
         for site in all_sites:
             c_up = getcount_up_oppo(val['condition_exp'], df.loc[site, 'condition_exp'])
@@ -248,14 +240,11 @@ def calculate_mat_op(df , CUT_OFF):
 
     df.drop('condition_exp',axis=1, inplace = True)
     
-    
     _dict = {}
     main_dic = {}
     
     c_dict = {}
     c_main_dic = {}
-
-    df.to_csv("result_oppo.csv")
 
     for i , row in df.iterrows():
         came = False

@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-def get_matrix_plot(main_data_df,color_data_df):
+def get_matrix_plot(main_data_df,color_data_df,kianase,type_):
     color_mapping = {
         color_data_df.iat[i, j]: tuple(int(color_data_df.iat[i,
     j][1:][k:k+2], 16) for k in (0, 2, 4))
@@ -37,4 +37,6 @@ def get_matrix_plot(main_data_df,color_data_df):
     ax.set_xticklabels(main_data_df.columns , rotation = 90)
     ax.set_yticklabels(main_data_df.index)
 
-    plt.show()
+    plt.tight_layout()
+    
+    plt.savefig(f'{kianase}_{type_}_plot',format='svg')
