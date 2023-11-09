@@ -352,7 +352,7 @@ def calculate_ratio(df,odf):
 
         c_main_dic[i] = c_dict
         c_dict = {}
-
+    
     colour_df  = pd.DataFrame(c_main_dic)
     colour_df.to_csv('colour_df.csv')
     colour_df.fillna('#ffffff', inplace=True)
