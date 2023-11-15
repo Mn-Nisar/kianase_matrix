@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import os
 from dotenv import load_dotenv
-
+import time
 load_dotenv()
 
 DB_HOST = os.getenv('DB_HOST')
@@ -113,7 +113,9 @@ def get_colour_code_g( max_, min_ , v):
 
 
 def get_colour_code_red(max_, min_ , v):
+    print(v)
     n_v = normalize(v,min_,max_)
+    print(n_v)
     return generate_red_gradient(n_v)
 
 
@@ -335,6 +337,8 @@ def calculate_ratio(df,odf):
     df[:] = divide_arrays(df.values, odf.values)
     max_up,min_up, max_down, min_down = get_min_max(df)
 
+    print(max_up,min_up, max_down, min_down)
+
     c_dict = {}
     c_main_dic = {}
 
@@ -348,6 +352,7 @@ def calculate_ratio(df,odf):
                 if came:
                     c_dict[k] = get_colour_code_g( max_down, min_down , v)
                 else:
+                
                     c_dict[k] = get_colour_code_red( max_up, min_up , v)
 
         c_main_dic[i] = c_dict
