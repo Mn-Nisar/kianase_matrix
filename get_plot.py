@@ -36,8 +36,8 @@ def get_matrix_plot(main_data_df,color_data_df,kianase,type_):
     
     ax.xaxis.tick_top()
     
-    ax.set_xlabel('YAP1 Phosphosites',fontsize=6)
-    ax.set_ylabel('YAP1 Phosphosites',fontsize=6)
+    ax.set_xlabel(f'{kianase} Phosphosites',fontsize=6)
+    ax.set_ylabel(f'{kianase} Phosphosites',fontsize=6)
    
     ax.xaxis.set_label_position('top') 
 
@@ -58,5 +58,5 @@ def get_matrix_plot(main_data_df,color_data_df,kianase,type_):
    
    
     plt.tight_layout(pad=1.2)
-    plt.savefig(f'{kianase}_{type_}_plot.svg',format='svg')
+    plt.savefig(f'output/{kianase}_{type_}_plot.svg',format='svg')
     

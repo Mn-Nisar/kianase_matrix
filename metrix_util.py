@@ -1,19 +1,15 @@
 import pymysql
 import pandas as pd
 import numpy as np
-import os
-from dotenv import load_dotenv
-import time
-load_dotenv()
-
-DB_HOST = os.getenv('DB_HOST')
-DB_USER = os.getenv('DB_USER')
-DB_PASSWORD = os.getenv('DB_PASSWORD')
-DB_NAME = os.getenv('DB_NAME')
 
 
-def get_query(k):
-    q = f'''SELECT exp_condition,mapped_phosphosite,expression FROM  phospodb_nisar_differential_data WHERE mapped_genesymbol = '{k}' '''
+DB_HOST = 'newdb-ciods.cz2m6guayo6l.us-west-1.rds.amazonaws.com'
+DB_USER = 'admin'
+DB_PASSWORD = 'ciods123'
+DB_NAME = 'Phosphoproteome_database'
+
+def get_query(k,diff_tabel):
+    q = f'''SELECT exp_condition,mapped_phosphosite,expression FROM  {diff_tabel} WHERE mapped_genesymbol = '{k}' '''
     return q
 
 
